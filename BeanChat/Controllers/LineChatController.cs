@@ -8,6 +8,7 @@ using System.Runtime.Caching;
 using isRock.LineBot;
 using System.Text.RegularExpressions;
 using BeanChat.Module;
+using BeanChat.Models;
 
 namespace BeanChat.Controllers
 {
@@ -38,9 +39,10 @@ namespace BeanChat.Controllers
         }
 
         [HttpGet]
-        public string Get()
+        public List<OpenDataPM25> Get()
         {
-            return $"ChannelAccessToken = ?";
+            var model = new AirQuality().GetList();
+            return model;
         }
 
         [HttpPost]
@@ -144,7 +146,7 @@ namespace BeanChat.Controllers
                     {
                         var area = word[0].Replace("台", "臺");
                         var air = new AirQuality();
-                        var model = air.GetList().Where(x => x.county.Contains(area[0]) || x.Site.Contains(area[0]));
+                        var model = air.GetList().Where(x => x.county.Contains(area) || x.Site.Contains(area));
                         if (model.Count() > 0)
                         {
                             foreach (var item in model)

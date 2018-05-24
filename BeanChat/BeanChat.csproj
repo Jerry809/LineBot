@@ -95,6 +95,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Module\CacheManager\CacheManager.cs" />
+    <Compile Include="Module\PM2.5\AirQuality.cs" />
     <Compile Include="Module\猜數字\GuessNum.cs" />
     <Compile Include="Models\OpenDataPM25.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,7 +112,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Module\PM2.5\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

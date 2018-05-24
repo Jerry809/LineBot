@@ -136,6 +136,10 @@ namespace BeanChat.Controllers
                     }
 
                 }
+                else if (message.Contains("PM2.5"))
+                {
+
+                }
 
                 //回覆API OK       
                 isRock.LineBot.Utility.ReplyMessage(messageObject.replyToken, $"{reply}", ChannelAccessToken);

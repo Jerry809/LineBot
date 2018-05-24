@@ -13,14 +13,17 @@ namespace BeanChat.Models
         public string DataCreationDate { get; set; }
         public string ItemUnit { get; set; }
 
-        public string Status(string PM25)
+        public string Status
         {
-            if (Convert.ToInt16(PM25) >= 25)
-                return "不良";
-            else if (Convert.ToInt16(PM25) <= 12)
-                return "良好";
-            else
-                return "普通";
+            get
+            {
+                if (Convert.ToInt16(this.PM25) >= 25)
+                    return "空氣品質不良";
+                else if (Convert.ToInt16(this.PM25) <= 12)
+                    return "空氣品質良好";
+                else
+                    return "空氣品質普通";
+            }
         }
     }
 }

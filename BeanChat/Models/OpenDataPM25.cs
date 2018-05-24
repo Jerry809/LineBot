@@ -10,7 +10,7 @@ namespace BeanChat.Models
         public string Site { get; set; }
         public string county { get; set; }
         public string PM25 { get; set; }
-        public string DataCreationDate { get; set; }
+        public DateTime? DataCreationDate { get; set; }
         public string ItemUnit { get; set; }
 
         public string Status

@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Runtime.Caching;
 using isRock.LineBot;
 using System.Text.RegularExpressions;
+using BeanChat.Module;
 
 namespace BeanChat.Controllers
 {
@@ -138,7 +139,25 @@ namespace BeanChat.Controllers
                 }
                 else if (message.Contains("PM2.5"))
                 {
-
+                    var word = message.Split('的');
+                    if (word.Length == 2 && word[1].Contains("PM2.5"))
+                    {
+                        var area = word[0].Replace("台", "臺");
+                        var air = new AirQuality();
+                        var model = air.GetList().Where(x => x.county.Contains(area[0]) || x.Site.Contains(area[0]));
+                        if (model.Count() > 0)
+                        {
+                            foreach (var item in model)
+                            {
+                                reply += $"{item.county}{item.Site}的PM2.5為[{item.PM25}], {item.Status}\\n";
+                            }
+                            reply += $"更新時間:{model.FirstOrDefault().DataCreationDate.Value}";
+                        }
+                        else
+                        {
+                            reply = "查無資料 , 有可能打錯關鍵字, 可以試試 新北市的PM2.5 或 三重的PM2.5";
+                        }
+                    }
                 }
 
                 //回覆API OK       

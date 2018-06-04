@@ -168,7 +168,7 @@ namespace BeanChat.Controllers
             }
             catch (Exception ex)
             {
-                //isRock.LineBot.Utility.ReplyMessage(item.replyToken, $"{ex.Message}  item.source.type {item.source.type}"  , ChannelAccessToken);
+                isRock.LineBot.Utility.ReplyMessage(messageObject.replyToken, $"{ex.Message}  \nitem.source.type {messageObject.source.type}", ChannelAccessToken);
                 return Ok();
             }
         }

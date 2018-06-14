@@ -85,10 +85,10 @@ namespace BeanChat.Controllers
                 }
                 else if (message == "猜數字")
                 {
-                    reply = $"{userInfo.displayName} 開始猜數字 , 請輸入: 4位數字 (ex:1234) , 時間10分鐘";
+                    reply = $"{userInfo.displayName} 開始猜數字 , 請輸入: 4位數字 (ex:1234) , 時間20分鐘";
                     var number = new GuessNum().GenNum();
                     var policy = new CacheItemPolicy();
-                    policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10);
+                    policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20);
                     cache.Set(ownKey, number, policy);
                     cache.Set($"{ownKey}Count", 0, policy);
                     cache.Remove(id);
@@ -113,10 +113,10 @@ namespace BeanChat.Controllers
                 }
                 else if (message == "一起猜")
                 {
-                    reply = $"大家開始猜數字 , 請輸入: 4位數字 (ex:1234) , 時間10分鐘";
+                    reply = $"大家開始猜數字 , 請輸入: 4位數字 (ex:1234) , 時間20分鐘";
                     var number = new GuessNum().GenNum();
                     var policy = new CacheItemPolicy();
-                    policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10);
+                    policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20);
                     cache.Set(id, number, policy);
                     cache.Set($"{id}Count", 0, policy);
                 }

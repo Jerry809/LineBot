@@ -9,6 +9,8 @@ using isRock.LineBot;
 using System.Text.RegularExpressions;
 using BeanChat.Module;
 using BeanChat.Models;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace BeanChat.Controllers
 {
@@ -39,10 +41,19 @@ namespace BeanChat.Controllers
         }
 
         [HttpGet]
-        public List<OpenDataPM25> Get()
+        public HttpResponseMessage Get()
         {
-            var model = new AirQuality().GetList();
-            return model;
+            var response = new HttpResponseMessage();
+            try
+            {
+                var model = new AirQuality().GetList();
+                response.Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                response.Content = new StringContent(ex.Message, Encoding.UTF8);
+            }
+            return response;
         }
 
         [HttpPost]
@@ -87,8 +98,10 @@ namespace BeanChat.Controllers
                 {
                     reply = $"{userInfo.displayName} 開始猜數字 , 請輸入: 4位數字 (ex:1234) , 時間20分鐘";
                     var number = new GuessNum().GenNum();
-                    var policy = new CacheItemPolicy();
-                    policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20);
+                    var policy = new CacheItemPolicy
+                    {
+                        AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
+                    };
                     cache.Set(ownKey, number, policy);
                     cache.Set($"{ownKey}Count", 0, policy);
                     cache.Remove(id);
@@ -115,8 +128,10 @@ namespace BeanChat.Controllers
                 {
                     reply = $"大家開始猜數字 , 請輸入: 4位數字 (ex:1234) , 時間20分鐘";
                     var number = new GuessNum().GenNum();
-                    var policy = new CacheItemPolicy();
-                    policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20);
+                    var policy = new CacheItemPolicy
+                    {
+                        AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
+                    };
                     cache.Set(id, number, policy);
                     cache.Set($"{id}Count", 0, policy);
                 }

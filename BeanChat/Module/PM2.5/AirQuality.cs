@@ -12,7 +12,7 @@ namespace BeanChat.Module
 {
     public class AirQuality
     {
-        private const string openDataUrl = "http://opendata.epa.gov.tw/ws/Data/ATM00625/?$format=json";
+        private const string openDataUrl = "https://opendata.epa.gov.tw/ws/Data/ATM00625/?$format=json";
         private const string key = "AirOpenData";
         private List<OpenDataPM25> List { get; set; }
         ObjectCache _cache = MemoryCache.Default;        

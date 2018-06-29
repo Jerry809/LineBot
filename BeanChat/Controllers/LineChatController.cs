@@ -84,15 +84,20 @@ namespace BeanChat.Controllers
                     bool isFriday = false;
                     DateTime date = DateTime.Now;
 
-                    while (!isFriday)
+                    if (date.DayOfWeek == DayOfWeek.Friday)
+                        reply = $"今晚7點半,高品打老虎";
+                    else
                     {
-                        if (date.DayOfWeek == DayOfWeek.Friday)
-                            isFriday = true;
-                        else
-                            date = date.AddDays(1);
-                    }
+                        while (!isFriday)
+                        {
+                            if (date.DayOfWeek == DayOfWeek.Friday)
+                                isFriday = true;
+                            else
+                                date = date.AddDays(1);
+                        }
 
-                    reply = $"{date.ToString("yyyy/M/d")} 星期五 晚上7點半, 高品集合~~";
+                        reply = $"{date.ToString("yyyy/M/d")} 星期五 晚上7點半, 高品集合~~";
+                    }
                 }
                 else if (message == "猜數字")
                 {

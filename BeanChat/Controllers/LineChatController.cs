@@ -17,7 +17,7 @@ namespace BeanChat.Controllers
     public class LineChatController : ApiController
     {
         public string ChannelAccessToken = System.Environment.GetEnvironmentVariable("ChannelAccessToken");
-
+   
         ObjectCache cache = MemoryCache.Default;
 
         internal string GetLetou()
@@ -78,6 +78,10 @@ namespace BeanChat.Controllers
                 if (message.Contains("大樂透"))
                 {
                     reply = $"給你一組幸運號碼: {GetLetou()}";
+                }
+                else if (LuisMaster.HitLuis(message,out string luisMessage))
+                {
+                    reply = $"{luisMessage}";
                 }
                 else if (message.Contains("打球了"))
                 {

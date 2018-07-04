@@ -13,10 +13,33 @@ namespace BeanChat.Module
 {
     public class Crawler
     {
-        public void GetLetou()
+        private static object _lock = new object();
+        private static Crawler instance = null;
+
+        private Crawler()
+        {
+
+        }
+
+        public static Crawler GetInstance()
+        {
+            if (instance == null)
+            {
+                lock (_lock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new Crawler();
+                    }
+                }
+            }
+            return instance;
+        }
+
+        public void GetNewLetouData()
         {
             bool refresh = false;
-            var data = Letou.LetouList;
+            var data = Letou.GetInstance().LetouList;
             bool flag = false;
             int count = 1;
             var list = new List<LetouModel>();
@@ -28,7 +51,7 @@ namespace BeanChat.Module
 
                 // 使用預設編碼讀入 HTML
                 HtmlDocument doc = new HtmlDocument();
-                doc.Load(ms, Encoding.Default);
+                doc.Load(ms, Encoding.UTF8);
 
                 HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("/html[1]/body[1]/table[3]/tr[1]/td[1]/table[2]/tr");
 
@@ -44,10 +67,13 @@ namespace BeanChat.Module
                         var special = node.SelectNodes("td[3]").FirstOrDefault().InnerHtml;
 
                         if (data.FirstOrDefault(x => Convert.ToDateTime(x.Date) == Convert.ToDateTime(date)) != null)
+                        {
+                            flag = true;
                             break;
+                        }
                         else
                         {
-                            data.Add(new LetouModel() { Date = Convert.ToDateTime(date).ToShortDateString(), Numbers = number, Special = special });
+                            data.Add(new LetouModel() { Date = Convert.ToDateTime(date).ToString("yyyy/M/d"), Numbers = number, Special = special });
                             refresh = true;
                         }
 
@@ -63,7 +89,8 @@ namespace BeanChat.Module
             }
 
             if (refresh)
-                Letou.RefreshLetou(data);
+                Letou.GetInstance().RefreshLetou(data);
+
         }
     }
 }

@@ -38,13 +38,14 @@ namespace BeanChat
             return result;
         }
 
-        public Hint Compare(string answer, string trial)
+        public Hint Compare(string answer, string trial, out string msg)
         {
+            msg = string.Empty;
             List<int> dupCheck = new List<int>();
             int a = 0, b = 0;
             for (int i = 0; i < trial.Length; i++)
             {
-                if (dupCheck.Contains(trial[i])) throw new ApplicationException("Duplicated number");
+                if (dupCheck.Contains(trial[i])) msg="數字不可以重覆";
                 dupCheck.Add(trial[i]);
                 if (answer[i] == trial[i]) a++;
                 else if (answer.Contains(trial[i])) b++;

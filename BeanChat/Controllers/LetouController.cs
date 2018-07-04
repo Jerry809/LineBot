@@ -18,13 +18,13 @@ namespace BeanChat.Controllers
     {
         private readonly string path = HttpContext.Current.Server.MapPath("~/App_Data/Letou.json");
 
-        [Route("api/GetNewLetou")]
+        [Route("api/NewLetou")]
         [HttpGet]
-        public IEnumerable<LetouModel> GetNewLetou()
+        public IEnumerable<LetouModel> NewLetou()
         {
-            var crawler = new Crawler();
-            crawler.GetLetou();
-            return Letou.LetouList;
+            Crawler.GetInstance().GetNewLetouData();
+           
+            return Letou.GetInstance().LetouList;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace BeanChat.Controllers
         [HttpGet]
         public LetouModel Get(string date)
         {
-            return Letou.LetouList.FirstOrDefault(x => Convert.ToDateTime(x.Date).ToString("yyyyMMdd") == date);
+            return Letou.GetInstance().LetouList.FirstOrDefault(x => Convert.ToDateTime(x.Date).ToString("yyyyMMdd") == date);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace BeanChat.Controllers
         [HttpGet]
         public IEnumerable<LetouModel> Get()
         {
-            return Letou.LetouList;
+            return Letou.GetInstance().LetouList;
         }
 
     }

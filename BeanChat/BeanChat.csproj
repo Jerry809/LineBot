@@ -112,7 +112,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Letou.cs" />
+    <Compile Include="Models\LetouModel.cs" />
     <Compile Include="Module\CacheManager\CacheManager.cs" />
     <Compile Include="Module\Crawler\Crawler.cs" />
     <Compile Include="Module\Letou\Letou.cs" />

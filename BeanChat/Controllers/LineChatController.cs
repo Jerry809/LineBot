@@ -17,7 +17,7 @@ namespace BeanChat.Controllers
     public class LineChatController : ApiController
     {
         public string ChannelAccessToken = System.Environment.GetEnvironmentVariable("ChannelAccessToken");
-   
+
         ObjectCache cache = MemoryCache.Default;
 
         internal string GetLetou()
@@ -75,9 +75,22 @@ namespace BeanChat.Controllers
 
             try
             {
-                if (message.Contains("大樂透"))
+                if (message == "大樂透")
                 {
-                    reply = $"給你一組幸運號碼: {GetLetou()}";
+                    var numbers = GetLetou();
+                    var letouMsg = Letou.GetInstance().Compare(numbers);
+                    reply = $"給你一組幸運號碼: {numbers}\\n";
+                    reply += letouMsg;
+                }
+                else if (message == "大樂透機率")
+                {
+                    reply = Letou.GetInstance().GetHighRateNumbers();
+                }
+                else if (message.Contains("大樂透"))
+                {
+                    var numbers = message.Split(' ')?[1];
+                    if (numbers != null && numbers.Split(',').Count()==6)
+                        reply = Letou.GetInstance().Compare(numbers);
                 }
                 //else if (LuisMaster.HitLuis(message,out string luisMessage))
                 //{
@@ -120,12 +133,16 @@ namespace BeanChat.Controllers
                     var ans = cache[ownKey].ToString();
                     int.TryParse(cache[$"{ownKey}Count"].ToString(), out int count);
                     count++;
-                    var compare = new GuessNum().Compare(ans, message);
+                    var compare = new GuessNum().Compare(ans, message, out string errorMessage);
                     if (compare.A == 4)
                     {
                         reply = $"恭喜你猜對了 : {message} [你一共猜了{count}次]";
                         cache.Remove(ownKey);
                         cache.Remove($"{ownKey}Count");
+                    }
+                    else if (errorMessage != string.Empty)
+                    {
+                        reply += $"{errorMessage}";
                     }
                     else
                     {
@@ -149,12 +166,16 @@ namespace BeanChat.Controllers
                     var ans = cache[id].ToString();
                     int.TryParse(cache[$"{id}Count"].ToString(), out int count);
                     count++;
-                    var compare = new GuessNum().Compare(ans, message);
+                    var compare = new GuessNum().Compare(ans, message, out string errorMessage);
                     if (compare.A == 4)
                     {
                         reply += $"恭喜猜對了 : {message} [一共猜了{count}次]" +
                         cache.Remove(id);
                         cache.Remove($"{id}Count");
+                    }
+                    else if (errorMessage != string.Empty)
+                    {
+                        reply += $"{errorMessage}";
                     }
                     else
                     {

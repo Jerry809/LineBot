@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BeanChat</name>
+    </assembly>
+    <members>
+        <member name="M:BeanChat.Controllers.LetouController.Get(System.String)">
+            <summary>
+            取得特定日期的大樂透號碼
+            </summary>
+            <param name="date">日期 yyyyMMdd</param>
+            <returns></returns>
+        </member>
+        <member name="M:BeanChat.Controllers.LetouController.Get">
+            <summary>
+            取得所有期數的大樂透號碼
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

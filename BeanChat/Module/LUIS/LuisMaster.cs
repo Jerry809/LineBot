@@ -14,7 +14,9 @@ namespace BeanChat.Module
 
         public static bool HitLuis(string lineMessage, out string message)
         {
+
             message = string.Empty;
+            //return false;
             //建立LuisClient
             var lc = new LuisClient(LuisAppId, LuisAppKey, true, Luisdomain);
 
@@ -28,7 +30,7 @@ namespace BeanChat.Module
             {
                 message = $"OK，我知道你想 '{ret.TopScoringIntent.Name}'";
                 if (ret.Entities.Count > 0)
-                    message += $"而且是罵 {ret.Entities.FirstOrDefault().Value.FirstOrDefault().Value}";
+                    message += $"對象 {ret.Entities.FirstOrDefault().Value.FirstOrDefault().Value}";
                 return true;
             }
         }

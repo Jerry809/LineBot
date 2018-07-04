@@ -79,10 +79,10 @@ namespace BeanChat.Controllers
                 {
                     reply = $"給你一組幸運號碼: {GetLetou()}";
                 }
-                else if (LuisMaster.HitLuis(message,out string luisMessage))
-                {
-                    reply = $"{luisMessage}";
-                }
+                //else if (LuisMaster.HitLuis(message,out string luisMessage))
+                //{
+                //    reply = $"{luisMessage}";
+                //}
                 else if (message.Contains("打球了"))
                 {
                     bool isFriday = false;

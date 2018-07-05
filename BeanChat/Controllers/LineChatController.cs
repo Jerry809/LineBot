@@ -11,6 +11,7 @@ using BeanChat.Module;
 using BeanChat.Models;
 using Newtonsoft.Json;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BeanChat.Controllers
 {
@@ -57,7 +58,7 @@ namespace BeanChat.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult POST()
+        public async Task<IHttpActionResult> POST()
         {
             string postData = Request.Content.ReadAsStringAsync().Result;
             //剖析JSON
@@ -82,6 +83,45 @@ namespace BeanChat.Controllers
                     reply = $"給你一組幸運號碼: {numbers}\\n";
                     reply += letouMsg;
                 }
+                else if (message.ToLower().Contains("ubike"))
+                {
+                    var data = await UBike.Instance.GetAllData();
+                    var mday = data.FirstOrDefault().mday;
+                    var refreshTime = new DateTime(Convert.ToInt16(mday.Substring(0, 4)), Convert.ToInt16(mday.Substring(4, 2)),
+                                                   Convert.ToInt16(mday.Substring(6, 2)), Convert.ToInt16(mday.Substring(8, 2)),
+                                                   Convert.ToInt16(mday.Substring(10, 2)), Convert.ToInt16(mday.Substring(12, 2)));
+                    var location = message.ToLower().Replace("ubike", "").Trim();
+                    if (location == "三重家")
+                    {
+                        foreach (var item in data.Where(x => x.sno == "1008" || x.sno == "1010"))
+                            reply += $"[{item.sarea}-{item.sna}]車{item.sbi}空{item.bemp}\\n";
+
+                        if (reply == string.Empty)
+                            reply = "查無資料...";
+                        else
+                            reply += $"更新時間{refreshTime.ToString("yyyy/MM/dd HH:mm:ss")}";
+                    }
+                    else if (location.Contains("區"))
+                    {
+                        foreach (var item in data.Where(x => x.sarea == location))
+                            reply += $"[{item.sarea}-{item.sna}]車{item.sbi}空{item.bemp}\\n";
+
+                        if (reply == string.Empty)
+                            reply = "查無資料...";
+                        else
+                            reply += $"更新時間{refreshTime.ToString("yyyy/MM/dd HH:mm:ss")}";
+                    }
+                    else if (location != string.Empty)
+                    {
+                        foreach (var item in data.Where(x => x.sna.Contains(location)))
+                            reply += $"[{item.sarea}-{item.sna}]車{item.sbi}空{item.bemp}\\n";
+
+                        if (reply == string.Empty)
+                            reply = "查無資料...";
+                        else
+                            reply += $"更新時間{refreshTime.ToString("yyyy/MM/dd HH:mm:ss")}";
+                    }
+                }
                 else if (message == "大樂透機率")
                 {
                     reply = Letou.Instance.GetHighRateNumbers();
@@ -89,7 +129,7 @@ namespace BeanChat.Controllers
                 else if (message.Contains("大樂透"))
                 {
                     var numbers = message.Split(' ')?[1];
-                    if (numbers != null && numbers.Split(',').Count()==6)
+                    if (numbers != null && numbers.Split(',').Count() == 6)
                         reply = Letou.Instance.Compare(numbers);
                 }
                 //else if (LuisMaster.HitLuis(message,out string luisMessage))

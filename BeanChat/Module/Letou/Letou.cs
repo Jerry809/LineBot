@@ -12,28 +12,16 @@ namespace BeanChat.Module
 {
     public class Letou
     {
-        private static Letou instance = null;
+        private static readonly Lazy<Letou> LazyInstance = new Lazy<Letou>(() => new Letou());
         private static object _lock = new object();
         private static readonly string path = HttpContext.Current.Server.MapPath("~/App_Data/Letou.json");
+        public static Letou Instance { get { return LazyInstance.Value; } }
 
         public List<LetouModel> LetouList { get; set; }
 
         private Letou()
         {
             LetouList = GetLetou();
-        }
-
-        public static Letou GetInstance()
-        {
-            if (instance == null)
-            {
-                lock (_lock)
-                {
-                    if (instance == null)
-                        instance = new Letou();
-                }
-            }
-            return instance;
         }
 
         private static List<LetouModel> GetLetou()
@@ -148,7 +136,7 @@ namespace BeanChat.Module
             }
         }
 
-        private static void RefreshList() => GetInstance().LetouList = GetLetou();
+        private static void RefreshList() => Instance.LetouList = GetLetou();
 
         private class Hit
         {

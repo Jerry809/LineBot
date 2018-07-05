@@ -11,6 +11,7 @@ using BeanChat.Models;
 using System.Text;
 using System.Threading;
 using BeanChat.Module;
+using System.Threading.Tasks;
 
 namespace BeanChat.Controllers
 {
@@ -22,9 +23,16 @@ namespace BeanChat.Controllers
         [HttpGet]
         public IEnumerable<LetouModel> NewLetou()
         {
-            Crawler.GetInstance().GetNewLetouData();
-           
-            return Letou.GetInstance().LetouList;
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    Crawler.Instance.GetNewLetouData();
+                    Thread.Sleep(1000 * 60 * 60 * 12);
+                }   
+            });
+
+            return Letou.Instance.LetouList;
         }
 
         /// <summary>
@@ -36,7 +44,7 @@ namespace BeanChat.Controllers
         [HttpGet]
         public LetouModel Get(string date)
         {
-            return Letou.GetInstance().LetouList.FirstOrDefault(x => Convert.ToDateTime(x.Date).ToString("yyyyMMdd") == date);
+            return Letou.Instance.LetouList.FirstOrDefault(x => Convert.ToDateTime(x.Date).ToString("yyyyMMdd") == date);
         }
 
         /// <summary>
@@ -47,7 +55,7 @@ namespace BeanChat.Controllers
         [HttpGet]
         public IEnumerable<LetouModel> Get()
         {
-            return Letou.GetInstance().LetouList;
+            return Letou.Instance.LetouList;
         }
 
     }

@@ -14,32 +14,18 @@ namespace BeanChat.Module
     public class Crawler
     {
         private static object _lock = new object();
-        private static Crawler instance = null;
+        private static readonly Lazy<Crawler> LazyInstance = new Lazy<Crawler>(() => new Crawler());
+        public static Crawler Instance => LazyInstance.Value;
 
         private Crawler()
         {
 
-        }
-
-        public static Crawler GetInstance()
-        {
-            if (instance == null)
-            {
-                lock (_lock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new Crawler();
-                    }
-                }
-            }
-            return instance;
-        }
+        }        
 
         public void GetNewLetouData()
         {
             bool refresh = false;
-            var data = Letou.GetInstance().LetouList;
+            var data = Letou.Instance.LetouList;
             bool flag = false;
             int count = 1;
             var list = new List<LetouModel>();
@@ -89,7 +75,7 @@ namespace BeanChat.Module
             }
 
             if (refresh)
-                Letou.GetInstance().RefreshLetou(data);
+                Letou.Instance.RefreshLetou(data);
 
         }
     }

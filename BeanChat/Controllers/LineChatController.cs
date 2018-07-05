@@ -78,19 +78,19 @@ namespace BeanChat.Controllers
                 if (message == "大樂透")
                 {
                     var numbers = GetLetou();
-                    var letouMsg = Letou.GetInstance().Compare(numbers);
+                    var letouMsg = Letou.Instance.Compare(numbers);
                     reply = $"給你一組幸運號碼: {numbers}\\n";
                     reply += letouMsg;
                 }
                 else if (message == "大樂透機率")
                 {
-                    reply = Letou.GetInstance().GetHighRateNumbers();
+                    reply = Letou.Instance.GetHighRateNumbers();
                 }
                 else if (message.Contains("大樂透"))
                 {
                     var numbers = message.Split(' ')?[1];
                     if (numbers != null && numbers.Split(',').Count()==6)
-                        reply = Letou.GetInstance().Compare(numbers);
+                        reply = Letou.Instance.Compare(numbers);
                 }
                 //else if (LuisMaster.HitLuis(message,out string luisMessage))
                 //{

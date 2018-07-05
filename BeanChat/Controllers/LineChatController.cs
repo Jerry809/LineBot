@@ -83,6 +83,49 @@ namespace BeanChat.Controllers
                     reply = $"給你一組幸運號碼: {numbers}\\n";
                     reply += letouMsg;
                 }
+                else if (message.Contains("天氣"))
+                {
+                    var area = message.Replace("天氣", "").Replace("台", "臺").Trim();
+                    var data = (await Weather.Instance.GetData()).records.location.FirstOrDefault(x => x.locationName.Contains(area));
+                    var dic = new Dictionary<string, string>();
+                    foreach (var item in data.weatherElement.OrderBy(x=>x.elementName))
+                    {
+                        foreach (var time in item.time)
+                        {
+                            var key = $"{time.startTime}~{time.endTime}";
+                            if (!dic.Keys.Contains(key))
+                                dic.Add(key, "");
+
+                            switch (item.elementName)
+                            {
+                                case "Wx":
+                                    dic[key] += $"天氣:{time.parameter.parameterName}\\n";
+                                    break;
+                                case "PoP":
+                                    dic[key] += $"降雨機率:{time.parameter.parameterName}%\\n";
+                                    break;
+                                case "MinT":
+                                    dic[key] += $"低溫:{time.parameter.parameterName}C\\n";
+                                    break;
+                                case "CI":
+                                    dic[key] += $"適度:{time.parameter.parameterName}\\n";
+                                    break;
+                                case "MaxT":
+                                    dic[key] += $"高溫:{time.parameter.parameterName}C\\n";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+
+                    foreach (var item in dic)
+                        reply += $"{item.Key}\\n{item.Value}";
+
+                    if (reply == string.Empty)
+                        reply = "查無資料... 試試台北天氣";
+
+                }
                 else if (message.ToLower().Contains("ubike"))
                 {
                     var data = await UBike.Instance.GetAllData();

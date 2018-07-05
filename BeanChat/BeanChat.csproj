@@ -110,17 +110,20 @@
     <Compile Include="Controllers\TestLUISController.cs" />
     <Compile Include="Controllers\TestQnAController.cs" />
     <Compile Include="Controllers\UBikeController.cs" />
+    <Compile Include="Controllers\WeatherController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\LetouModel.cs" />
     <Compile Include="Models\UBikeModel.cs" />
+    <Compile Include="Models\WeatherModel.cs" />
     <Compile Include="Module\CacheManager\CacheManager.cs" />
     <Compile Include="Module\Crawler\Crawler.cs" />
     <Compile Include="Module\Letou\Letou.cs" />
     <Compile Include="Module\LUIS\LuisMaster.cs" />
     <Compile Include="Module\PM2.5\AirQuality.cs" />
     <Compile Include="Module\UBike\UBike.cs" />
+    <Compile Include="Module\Weather\Weather.cs" />
     <Compile Include="Module\猜數字\GuessNum.cs" />
     <Compile Include="Models\OpenDataPM25.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

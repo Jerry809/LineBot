@@ -13,7 +13,6 @@ namespace BeanChat.Module
 {
     public class Crawler
     {
-        private static object _lock = new object();
         private static readonly Lazy<Crawler> LazyInstance = new Lazy<Crawler>(() => new Crawler());
         public static Crawler Instance => LazyInstance.Value;
 

@@ -13,7 +13,6 @@ namespace BeanChat.Module
     public class Letou
     {
         private static readonly Lazy<Letou> LazyInstance = new Lazy<Letou>(() => new Letou());
-        private static object _lock = new object();
         private static readonly string path = HttpContext.Current.Server.MapPath("~/App_Data/Letou.json");
         public static Letou Instance { get { return LazyInstance.Value; } }
 

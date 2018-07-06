@@ -83,12 +83,20 @@ namespace BeanChat.Controllers
                     reply = $"給你一組幸運號碼: {numbers}\\n";
                     reply += letouMsg;
                 }
+                else if (message == "抽")
+                {
+                    var beauty = Beauty.GetBeauty();
+                    var random = new Random(new Random().Next(1, beauty.Count()));
+                    var image = beauty[random.Next(1, beauty.Count())];
+                    Utility.ReplyImageMessage(messageObject.replyToken, image, image, ChannelAccessToken);
+                    return Ok();
+                }
                 else if (message.Contains("天氣"))
                 {
                     var area = message.Replace("天氣", "").Replace("台", "臺").Trim();
                     var data = (await Weather.Instance.GetData()).records.location.FirstOrDefault(x => x.locationName.Contains(area));
                     var dic = new Dictionary<string, string>();
-                    foreach (var item in data.weatherElement.OrderBy(x=>x.elementName))
+                    foreach (var item in data.weatherElement.OrderBy(x => x.elementName))
                     {
                         foreach (var time in item.time)
                         {

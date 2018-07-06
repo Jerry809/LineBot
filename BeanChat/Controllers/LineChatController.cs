@@ -83,7 +83,7 @@ namespace BeanChat.Controllers
                     reply = $"給你一組幸運號碼: {numbers}\\n";
                     reply += letouMsg;
                 }
-                else if (message == "抽")
+                else if (message.Contains("抽"))
                 {
                     var beauty = Beauty.GetBeauty();
                     var random = new Random(new Random().Next(1, beauty.Count()));

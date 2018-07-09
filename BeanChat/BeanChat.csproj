@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BeautyController.cs" />
+    <Compile Include="Controllers\EatController.cs" />
     <Compile Include="Controllers\LetouController.cs" />
     <Compile Include="Controllers\LineChatController.cs" />
     <Compile Include="Controllers\LineWebHookSampleController.cs" />
@@ -115,12 +116,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\TemplateModel.cs" />
+    <Compile Include="Models\EatModel.cs" />
     <Compile Include="Models\LetouModel.cs" />
     <Compile Include="Models\UBikeModel.cs" />
     <Compile Include="Models\WeatherModel.cs" />
     <Compile Include="Module\Beauty\Beauty.cs" />
     <Compile Include="Module\CacheManager\CacheManager.cs" />
     <Compile Include="Module\Crawler\Crawler.cs" />
+    <Compile Include="Module\Eat\Eat.cs" />
     <Compile Include="Module\Letou\Letou.cs" />
     <Compile Include="Module\LUIS\LuisMaster.cs" />
     <Compile Include="Module\PM2.5\AirQuality.cs" />

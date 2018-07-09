@@ -91,6 +91,41 @@ namespace BeanChat.Controllers
                     Utility.ReplyImageMessage(messageObject.replyToken, image, image, ChannelAccessToken);
                     return Ok();
                 }
+                else if (message.Contains("美食"))
+                {
+                    var eat = new Eat();
+                    var data =await eat.GetEatData(message.Replace("美食",""));
+                    
+                    var list = new List<TemplateModel>();
+
+                    var model = new TemplateModel();
+                    model.template = new CarouselModel();
+                    model.template.columns = new List<ThumbnailImageModel>();
+
+                    foreach (var item in data.response.Where(x => x.restaurant != null).Take(3))
+                    {
+                        model.template.columns.Add(new ThumbnailImageModel()
+                        {
+                            thumbnailImageUrl = item.restaurant.cover_url,
+                            title = item.restaurant.name,
+                            text = item.address,
+                            defaultAction = new UriModel()
+                            {
+                                label = "瀏覽網誌",
+                                uri =item.url
+                            },
+                            actions = new List<UriModel>() {
+                            new UriModel()
+                            {
+                                label = "導航",
+                                uri =  $"https://www.google.com.tw/maps/place/{item.address}"
+                            }
+                        }
+                        });
+                    }
+                    list.Add(model);
+                    Utility.ReplyMessageWithJSON(messageObject.replyToken, JsonConvert.SerializeObject(list), ChannelAccessToken);
+                }
                 else if (message.Contains("天氣"))
                 {
                     var area = message.Replace("天氣", "").Replace("台", "臺").Trim();
@@ -300,6 +335,7 @@ namespace BeanChat.Controllers
 
                 //回覆API OK       
                 isRock.LineBot.Utility.ReplyMessage(messageObject.replyToken, $"{reply}", ChannelAccessToken);
+
                 //Utility.ReplyMessageWithJSON(messageObject.replyToken,FlexMessage(), ChannelAccessToken);
                 return Ok();
             }

@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BeautyController.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
     <Compile Include="Controllers\EatController.cs" />
     <Compile Include="Controllers\LetouController.cs" />
     <Compile Include="Controllers\LineChatController.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Module\Beauty\Beauty.cs" />
     <Compile Include="Module\CacheManager\CacheManager.cs" />
     <Compile Include="Module\Crawler\Crawler.cs" />
+    <Compile Include="Module\Demo\Demo.cs" />
     <Compile Include="Module\Eat\Eat.cs" />
     <Compile Include="Module\Letou\Letou.cs" />
     <Compile Include="Module\LUIS\LuisMaster.cs" />

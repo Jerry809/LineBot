@@ -21,6 +21,7 @@ namespace BeanChat.Controllers
     {
         public string ChannelAccessToken = System.Environment.GetEnvironmentVariable("ChannelAccessToken");
         public string Secret = System.Environment.GetEnvironmentVariable("Secret");
+        
 
         ObjectCache cache = MemoryCache.Default;
 
@@ -83,7 +84,7 @@ namespace BeanChat.Controllers
                 return Ok();
             }
 
-            
+
             //取得user說的話
             string message = messageObject.message.text;
             //回覆訊息
@@ -104,14 +105,9 @@ namespace BeanChat.Controllers
                     reply = $"給你一組幸運號碼: {numbers}\\n";
                     reply += letouMsg;
                 }
-                else if (message == "test")
+                else if (message == "安安9527" || message == "9527安安" || message=="安安")
                 {
-                    var signature = Request.Headers.GetValues("X-Line-Signature").First();
-                    var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(Secret));
-                    var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(Request.Content.ReadAsStringAsync().Result));
-                    var contentHash = Convert.ToBase64String(computeHash);
-
-                    reply = $"Signature={signature}, hmac={contentHash}";
+                    Utility.ReplyMessageWithJSON(messageObject.replyToken, Demo.Show(), ChannelAccessToken);
                 }
                 else if (message.Contains("抽"))
                 {
@@ -144,7 +140,7 @@ namespace BeanChat.Controllers
                                 label = "瀏覽網誌",
                                 uri = item.url.IndexOf('-') > 0 ? item.url.Substring(0, item.url.IndexOf('-')) : item.url
                             },
-                            actions = new List<UriModel>() {
+                            actions = new List<ActionModel>() {
                             new UriModel()
                             {
                                 label = "導航",

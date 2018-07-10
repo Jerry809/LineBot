@@ -27,13 +27,25 @@ namespace BeanChat.Models
         public string title { get; set; }
         public string text { get; set; }
         public UriModel defaultAction { get; set; }
-        public List<UriModel> actions { get; set; }
+        public List<ActionModel> actions { get; set; }
     }
 
-    public class UriModel
+    public abstract class ActionModel
+    {
+
+    }
+
+    public class UriModel : ActionModel
     {
         public string type => "uri";
         public string label { get; set; }
         public string uri { get; set; }
+    }
+
+    public class MessageModel : ActionModel
+    {
+        public string type => "message";
+        public string label { get; set; }
+        public string text { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace BeanChat.Controllers
                         label = "瀏覽網誌",
                         uri = HttpUtility.UrlDecode(item.url)
                     },
-                    actions = new List<UriModel>() {
+                    actions = new List<ActionModel>() {
                             new UriModel()
                             {
                                 label = "導航",

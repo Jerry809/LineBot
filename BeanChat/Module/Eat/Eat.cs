@@ -11,7 +11,7 @@ namespace BeanChat.Module
 {
     public class Eat
     {
-        private const string url = "https://ifoodie.tw/api/blog/?offset={0}&limit={1}&order_by=-date&q={2}";
+        private readonly string url = System.Environment.GetEnvironmentVariable("EatUrl");
         private HttpClient Client;
 
         public Eat()

@@ -53,23 +53,7 @@ namespace BeanChat.Controllers
             var headerHash = Request.Headers.GetValues("X-Line-Signature").First();
 
             return contentHash == headerHash;
-        }
-
-        [HttpGet]
-        public HttpResponseMessage Get()
-        {
-            var response = new HttpResponseMessage();
-            try
-            {
-                var model = new AirQuality().GetList();
-                response.Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8);
-            }
-            catch (Exception ex)
-            {
-                response.Content = new StringContent(ex.Message, Encoding.UTF8);
-            }
-            return response;
-        }
+        }       
 
         [HttpPost]
         public async Task<IHttpActionResult> POST()

@@ -12,12 +12,15 @@ using BeanChat.Models;
 using Newtonsoft.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Security.Cryptography;
 
 namespace BeanChat.Controllers
 {
     public class LineChatController : ApiController
     {
         public string ChannelAccessToken = System.Environment.GetEnvironmentVariable("ChannelAccessToken");
+        public string Secret = System.Environment.GetEnvironmentVariable("Secret");
 
         ObjectCache cache = MemoryCache.Default;
 
@@ -39,6 +42,16 @@ namespace BeanChat.Controllers
             }
 
             return string.Join(", ", arr.OrderBy(x => x).ToArray());
+        }
+
+        private async Task<bool> VaridateSignature(HttpRequestMessage request)
+        {
+            var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(Secret));
+            var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(await request.Content.ReadAsStringAsync()));
+            var contentHash = Convert.ToBase64String(computeHash);
+            var headerHash = Request.Headers.GetValues("X-Line-Signature").First();
+
+            return contentHash == headerHash;
         }
 
         [HttpGet]
@@ -63,6 +76,14 @@ namespace BeanChat.Controllers
             string postData = Request.Content.ReadAsStringAsync().Result;
             //剖析JSON
             var messageObject = isRock.LineBot.Utility.Parsing(postData).events.FirstOrDefault();
+
+            if (!await VaridateSignature(Request))
+            {
+                isRock.LineBot.Utility.ReplyMessage(messageObject.replyToken, "驗證失敗", ChannelAccessToken);
+                return Ok();
+            }
+
+            
             //取得user說的話
             string message = messageObject.message.text;
             //回覆訊息
@@ -83,6 +104,15 @@ namespace BeanChat.Controllers
                     reply = $"給你一組幸運號碼: {numbers}\\n";
                     reply += letouMsg;
                 }
+                else if (message == "test")
+                {
+                    var signature = Request.Headers.GetValues("X-Line-Signature").First();
+                    var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(Secret));
+                    var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(Request.Content.ReadAsStringAsync().Result));
+                    var contentHash = Convert.ToBase64String(computeHash);
+
+                    reply = $"Signature={signature}, hmac={contentHash}";
+                }
                 else if (message.Contains("抽"))
                 {
                     var beauty = Beauty.GetBeauty();
@@ -94,15 +124,15 @@ namespace BeanChat.Controllers
                 else if (message.Contains("美食"))
                 {
                     var eat = new Eat();
-                    var data =await eat.GetEatData(message.Replace("美食",""));
-                    
+                    var data = await eat.GetEatData(message.Replace("美食", ""));
+
                     var list = new List<TemplateModel>();
 
                     var model = new TemplateModel();
                     model.template = new CarouselModel();
                     model.template.columns = new List<ThumbnailImageModel>();
 
-                    foreach (var item in data.response.Where(x => x.restaurant != null).Take(3))
+                    foreach (var item in data.response.Where(x => x.restaurant != null).Take(10))
                     {
                         model.template.columns.Add(new ThumbnailImageModel()
                         {
@@ -112,19 +142,23 @@ namespace BeanChat.Controllers
                             defaultAction = new UriModel()
                             {
                                 label = "瀏覽網誌",
-                                uri =item.url
+                                uri = item.url.IndexOf('-') > 0 ? item.url.Substring(0, item.url.IndexOf('-')) : item.url
                             },
                             actions = new List<UriModel>() {
                             new UriModel()
                             {
                                 label = "導航",
-                                uri =  $"https://www.google.com.tw/maps/place/{item.address}"
+                                uri =  $"https://www.google.com.tw/maps/place/{item.restaurant.address}"
                             }
                         }
                         });
                     }
                     list.Add(model);
-                    Utility.ReplyMessageWithJSON(messageObject.replyToken, JsonConvert.SerializeObject(list), ChannelAccessToken);
+
+                    if (model.template.columns.Count > 0)
+                        Utility.ReplyMessageWithJSON(messageObject.replyToken, JsonConvert.SerializeObject(list), ChannelAccessToken);
+                    else
+                        reply = "查無資料...";
                 }
                 else if (message.Contains("天氣"))
                 {
@@ -345,6 +379,16 @@ namespace BeanChat.Controllers
                 return Ok();
             }
         }
+
+        //private async Task<bool> VaridateSignature(HttpRequestMessage request)
+        //{
+        //    var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["ChannelSecret"].ToString()));
+        //    var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(await request.Content.ReadAsStringAsync()));
+        //    var contentHash = Convert.ToBase64String(computeHash);
+        //    var headerHash = Request.Headers.GetValues("X-Line-Signature").First();
+
+        //    return contentHash == headerHash;
+        //}
 
         private LineUserInfo GetUserInfoAndId(Event message, out string id)
         {

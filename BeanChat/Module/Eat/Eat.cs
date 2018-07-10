@@ -11,7 +11,7 @@ namespace BeanChat.Module
 {
     public class Eat
     {
-        private const string url = "https://ifoodie.tw/api/blog/?order_by=-date&q={0}";
+        private const string url = "https://ifoodie.tw/api/blog/?offset={0}&limit={1}&order_by=-date&q={2}";
         private HttpClient Client;
 
         public Eat()
@@ -21,9 +21,22 @@ namespace BeanChat.Module
 
         public async Task<EatModel> GetEatData(string area)
         {
-            var data = await Client.GetAsync(string.Format(url, HttpUtility.UrlEncode(area)));
-            var content = await data.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<EatModel>(content);
+            EatModel result = null;
+            var random = new Random().Next(0, 10);
+            int offset = random * 20;
+            int limit = 20;
+            int count = 0;
+
+            while (count == 0 && offset > 0)
+            {
+                var data = await Client.GetAsync(string.Format(url, offset, limit, HttpUtility.UrlEncode(area)));
+                var content = await data.Content.ReadAsStringAsync();
+                result = JsonConvert.DeserializeObject<EatModel>(content);
+                count = result.response.Count;
+                offset -= 20;
+            }
+
+            return result;
         }
 
     }

@@ -21,8 +21,6 @@ namespace BeanChat.Controllers
     {
         public string ChannelAccessToken = System.Environment.GetEnvironmentVariable("ChannelAccessToken");
         public string Secret = System.Environment.GetEnvironmentVariable("Secret");
-        
-
         ObjectCache cache = MemoryCache.Default;
 
         internal string GetLetou()

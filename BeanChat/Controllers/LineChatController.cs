@@ -66,7 +66,6 @@ namespace BeanChat.Controllers
                 return Ok();
             }
 
-
             //取得user說的話
             string message = messageObject.message.text;
             //回覆訊息

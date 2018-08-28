@@ -39,8 +39,7 @@ namespace BeanChat.Controllers
                 if (cnt >= 6)
                     break;
             }
-
-
+            
             return string.Join(", ", arr.OrderBy(x => x).ToArray());
         }
 

@@ -19,7 +19,7 @@ namespace BeanChat.Controllers
     {
         private readonly string path = HttpContext.Current.Server.MapPath("~/App_Data/Letou.json");
 
-        [Route("api/NewLetou")]
+        [Route("NewLetou")]
         [HttpGet]
         public IEnumerable<LetouModel> NewLetou()
         {
@@ -40,7 +40,7 @@ namespace BeanChat.Controllers
         /// </summary>
         /// <param name="date">日期 yyyyMMdd</param>
         /// <returns></returns>
-        [Route("api/Letou/{date}")]
+        [Route("Letou/{date}")]
         [HttpGet]
         public LetouModel Get(string date)
         {
@@ -51,7 +51,7 @@ namespace BeanChat.Controllers
         /// 取得所有期數的大樂透號碼
         /// </summary>
         /// <returns></returns>
-        [Route("api/Letou")]
+        [Route("Letou")]
         [HttpGet]
         public IEnumerable<LetouModel> Get()
         {

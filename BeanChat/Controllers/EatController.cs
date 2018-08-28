@@ -13,7 +13,7 @@ namespace BeanChat.Controllers
 {
     public class EatController : ApiController
     {
-        [Route("~/api/eat/{area}")]
+        [Route("eat/{area}")]
         public async Task<List<TemplateModel>> Get(string area)
         {
             var eat = new Eat();

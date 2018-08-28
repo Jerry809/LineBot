@@ -10,7 +10,7 @@ namespace BeanChat.Controllers
 {
     public class BeautyController : ApiController
     {
-        // GET: api/Beauty
+        [Route("Beauty")]
         public Dictionary<int,string> Get()
         {
             return Beauty.GetBeauty();

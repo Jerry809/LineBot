@@ -12,7 +12,7 @@ namespace BeanChat.Controllers
 {
     public class WeatherController : ApiController
     {
-        // GET: api/Weather
+        [Route("Weather")]
         public async Task<WeatherModel> Get()
         {
             return await Weather.Instance.GetData();

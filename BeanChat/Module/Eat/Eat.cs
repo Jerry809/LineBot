@@ -23,6 +23,7 @@ namespace BeanChat.Module
         {
             EatModel result = null;
             var random = new Random().Next(0, 10);
+            random = random == 0 ? 1 : random;
             int offset = random * 20;
             int limit = 20;
             int count = 0;

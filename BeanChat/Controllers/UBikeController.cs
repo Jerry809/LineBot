@@ -14,7 +14,7 @@ namespace BeanChat.Controllers
     public class UBikeController : ApiController
     {
         // GET: api/UBike
-        [Route("api/UBike/{city}")]
+        [Route("UBike/{city}")]
         public async Task<IEnumerable<UBikeRecord>> Get(string city)
         {
             IEnumerable<UBikeRecord> result = null;

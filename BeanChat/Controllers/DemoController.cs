@@ -10,7 +10,7 @@ namespace BeanChat.Controllers
 {
     public class DemoController : ApiController
     {
-        // GET: api/Demo
+        [Route("Demo")]
         public string Get()
         {
             return Demo.Show();

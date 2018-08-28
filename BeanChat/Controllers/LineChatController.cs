@@ -40,6 +40,7 @@ namespace BeanChat.Controllers
                     break;
             }
 
+
             return string.Join(", ", arr.OrderBy(x => x).ToArray());
         }
 
